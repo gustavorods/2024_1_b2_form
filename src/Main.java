@@ -1,8 +1,8 @@
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
+import java.text.ParseException;
 
 public class Main extends JFrame {
     // Objetos
@@ -18,7 +18,9 @@ public class Main extends JFrame {
     JComboBox<String> estdCivil;
     String estdCivilArray[] = {"Solteiro(a)", "Casado(a)", "viúvo(a)", "Divorciado(a)"};
 
-    public Main() {
+    MaskFormatter idadeMask;
+
+        public Main() {
         // Configurações da Janela
             super("Formulário");
             Container tela = getContentPane();
@@ -26,10 +28,11 @@ public class Main extends JFrame {
             setSize(500,500);
             setResizable(false);
 
+
         // Criando os elementos
             // Label
             nomeLabel = new JLabel("Nome:");
-            nomeLabelPlaceHolder = new JLabel("Insira aqui seu nome");
+            nomeLabelPlaceHolder = new JLabel("");
             nomeLabelPlaceHolder.setForeground(Color.gray);
             idadeLabel = new JLabel("Idade:");
             sexoLabel =  new JLabel("Sexo:");
@@ -64,19 +67,20 @@ public class Main extends JFrame {
             // JCombo Box
             estdCivil = new JComboBox<>(estdCivilArray);
 
+
         // Posicionando na tela
             nomeLabel.setBounds(20,20,60,20);
             nomeLabelPlaceHolder.setBounds(75,20,140,20);
             nomeField.setBounds(70,20,140,25);
 
             idadeLabel.setBounds(20,60,60,20);
-            idadeField.setBounds(70,60,100,20);
+            idadeField.setBounds(70,60,40,20);
 
             sexoLabel.setBounds(20,105,60,20);
             mascRdnButton.setBounds(70, 106, 20, 20);
-            rdnButton1Label.setBounds(95,105,60,20);
+            rdnButton1Label.setBounds(95,105,80,20);
             femiRdnButton.setBounds(170, 106, 20, 20);
-            rdnButton2Label.setBounds(195,105,60,20);
+            rdnButton2Label.setBounds(195,105,80,20);
 
             interessesLabel.setBounds(20,145,100,20);
             interesse1ChkButton.setBounds(20, 170, 20, 20);
@@ -87,12 +91,13 @@ public class Main extends JFrame {
             chkBox3Label.setBounds(45, 210, 100, 20);
 
             estdCivilLabel.setBounds(20,250,100,20);
-            estdCivil.setBounds(105,250,100,20);
+            estdCivil.setBounds(110,250,100,20);
 
-            enviar.setBounds(20,300,130,20);
-            limpar.setBounds(165,300,130,20);
+            enviar.setBounds(20,300,150,20);
+            limpar.setBounds(185,300,180,20);
 
             creditos.setBounds(20,400,250,20);
+
 
         // Métodos / Funções
             // Apaga os dados
@@ -113,8 +118,33 @@ public class Main extends JFrame {
             limpar.setMnemonic(KeyEvent.VK_L);
 
             // Place Holder
+            nomeField.addFocusListener(new FocusListener() {
+                    public void focusGained(FocusEvent e) {
+                            if (nomeField.getForeground().equals(Color.GRAY)) {
+                                    nomeField.setText("");
+                                    nomeField.setForeground(Color.BLACK);
+                            }
+                    }
 
-        // Adicionando da tela
+                    public void focusLost(FocusEvent e) {
+                            if (nomeField.getText().isEmpty()) {
+                                    nomeField.setForeground(Color.GRAY);
+                                    nomeField.setText("Insira aqui seu nome");
+                            }
+                    }
+            });
+
+            // Máscara
+            try {
+                    idadeMask = new MaskFormatter("###");
+                    idadeMask.setPlaceholderCharacter('-');
+            }
+            catch (ParseException e) {}
+            idadeField = new JFormattedTextField(idadeMask);
+            idadeField.setBounds(70,60,40,20);
+
+
+        // Adicionando elementos
             tela.add(nomeLabel);
             tela.add(nomeLabelPlaceHolder);
             tela.add(nomeField);
@@ -140,6 +170,7 @@ public class Main extends JFrame {
 
             setVisible(true);
     }
+
 
     public static void main(String[] args) {
         Main app = new Main();
